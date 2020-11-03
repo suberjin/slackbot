@@ -46,5 +46,7 @@ spec:
           httpGet:
             path: /readinez
             port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 0
+          periodSeconds: 2
+          failureThreshold: 3
+          successThreshold: 1
