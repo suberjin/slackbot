@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slackbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slackbot
+  template:
+    metadata:
+      labels:
+        app: slackbot
+    spec:
+      containers:
+      - image: suberjin/slackbot-fastapi:0.0.1
+        imagePullPolicy: IfNotPresent
+        name: slackbot
+        ports:
+        - containerPort: 8000
+        env:
+          - name: API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: API_KEY
+          - name: SLACK_SIGNING_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: SLACK_SIGNING_SECRET
+          - name: SLACK_BOT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: SLACK_BOT_TOKEN
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8000
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /readinez
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10

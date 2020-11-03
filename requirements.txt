@@ -1,0 +1,5 @@
+fastapi<1
+uvicorn<1
+slack-bolt==0.9.6b0
+requests
+#json
